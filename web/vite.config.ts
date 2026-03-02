@@ -13,6 +13,11 @@ export default defineConfig({
   server: {
     port: 5173,
     host: true,
+    allowedHosts: [
+      'localhost',
+      '127.0.0.1',
+      'scumgenesis.com',
+    ],
     proxy: {
       '/logs': {
         target: process.env.VITE_PROXY_TARGET || 'http://localhost:3000',
