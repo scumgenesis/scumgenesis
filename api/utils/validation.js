@@ -23,7 +23,6 @@ export function isValidAdminLogFilename(filename) {
 
   if (containsPathComponents(filename)) return false;
 
-  /* Bypass por URL encoding: validar também a forma decodificada (ex.: %2e%2e%2f -> ../) */
   try {
     const decoded = decodeURIComponent(filename);
     if (decoded !== filename && containsPathComponents(decoded)) return false;
