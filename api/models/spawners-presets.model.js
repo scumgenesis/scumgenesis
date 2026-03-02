@@ -10,8 +10,19 @@ import config, { getSpawnersOverridePath } from '../config/config.js';
 const sftpLimit = pLimit(config.sftpConcurrency);
 
 /**
+ * Converte timestamp do SFTP para ISO. Aceita segundos (até 1e12) ou milissegundos.
+ * @param {number} time - segundos ou ms desde epoch
+ * @returns {string|null} data em ISO ou null
+ */
+function toISO(time) {
+  if (time == null || time <= 0) return null;
+  const ms = time < 1e12 ? time * 1000 : time;
+  return new Date(ms).toISOString();
+}
+
+/**
  * Lista diretórios e arquivos em Presets/Override (operação real no SFTP).
- * @returns {Promise<Array<{ name: string, type: 'directory', items: Array<{ name: string, type: 'directory'|'file' }> }>>}
+ * @returns {Promise<Array<{ name: string, type: 'directory', items: Array<{ name: string, type: 'directory'|'file', lastModified?: string|null }> }>>}
  */
 async function doFetchSpawnersPresetsOverride() {
   const client = await createSftpClient();
@@ -44,6 +55,7 @@ async function doFetchSpawnersPresetsOverride() {
           .map((e) => ({
             name: e.name,
             type: e.type === 'd' ? 'directory' : 'file',
+            lastModified: toISO(e.modifyTime),
           }));
       } catch (listErr) {
         items = [];
@@ -69,7 +81,7 @@ async function doFetchSpawnersPresetsOverride() {
 
 /**
  * Lista diretórios e arquivos em Presets/Override (respeitando limite de concorrência SFTP).
- * @returns {Promise<Array<{ name: string, type: 'directory', items: Array<{ name: string, type: 'directory'|'file' }> }>>}
+ * @returns {Promise<Array<{ name: string, type: 'directory', items: Array<{ name: string, type: 'directory'|'file', lastModified?: string|null }> }>>}
  */
 export async function fetchSpawnersPresetsOverride() {
   return sftpLimit(() => doFetchSpawnersPresetsOverride());

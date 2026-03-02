@@ -7,6 +7,8 @@ const LOOT_BASE = `${API_ROOT}/loot`;
 export interface PresetItem {
   name: string;
   type: 'file' | 'directory';
+  /** Data da última modificação (ISO) quando disponível */
+  lastModified?: string | null;
 }
 
 export interface PresetDirectory {

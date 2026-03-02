@@ -118,6 +118,17 @@ export function LootView() {
                                 <span className="text-muted-foreground text-xs">
                                   {item.type === 'directory' ? 'pasta' : 'arquivo'}
                                 </span>
+                                {item.lastModified && (
+                                  <span className="ml-auto text-muted-foreground text-xs tabular-nums">
+                                    {new Date(item.lastModified).toLocaleString('pt-BR', {
+                                      day: '2-digit',
+                                      month: '2-digit',
+                                      year: 'numeric',
+                                      hour: '2-digit',
+                                      minute: '2-digit',
+                                    })}
+                                  </span>
+                                )}
                               </div>
                             ))
                           )}

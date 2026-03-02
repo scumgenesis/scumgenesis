@@ -8,7 +8,7 @@ import { fetchSpawnersPresetsOverride } from '../models/spawners-presets.model.j
 
 /**
  * Lista diretórios e arquivos em Presets/Override: retorna do cache se válido, senão busca no SFTP e armazena no cache.
- * @returns {Promise<Array<{ name: string, type: 'directory', items: Array<{ name: string, type: 'directory'|'file' }> }>>}
+ * @returns {Promise<Array<{ name: string, type: 'directory', items: Array<{ name: string, type: 'directory'|'file', lastModified?: string|null }> }>>}
  */
 export async function listPresetsOverride() {
   const cached = getCachedPresetsOverride();

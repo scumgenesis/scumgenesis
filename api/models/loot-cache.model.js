@@ -5,12 +5,12 @@
 
 const PRESETS_OVERRIDE_TTL_MS = 60 * 60 * 1000; // 1 hora
 
-/** @type {{ data: Array<{ name: string, type: 'directory', items: Array<{ name: string, type: 'directory'|'file' }> }>, fetchedAt: number } | null} */
+/** @type {{ data: Array<{ name: string, type: 'directory', items: Array<{ name: string, type: 'directory'|'file', lastModified?: string|null }> }>, fetchedAt: number } | null} */
 let presetsOverrideEntry = null;
 
 /**
  * Retorna a listagem Presets/Override em cache se ainda válida (TTL 1h).
- * @returns {Array<{ name: string, type: 'directory', items: Array<{ name: string, type: 'directory'|'file' }> }> | null}
+ * @returns {Array<{ name: string, type: 'directory', items: Array<{ name: string, type: 'directory'|'file', lastModified?: string|null }> }> | null}
  */
 export function getCachedPresetsOverride() {
   if (!presetsOverrideEntry || Date.now() - presetsOverrideEntry.fetchedAt >= PRESETS_OVERRIDE_TTL_MS) {
@@ -21,7 +21,7 @@ export function getCachedPresetsOverride() {
 
 /**
  * Armazena listagem Presets/Override no cache.
- * @param {Array<{ name: string, type: 'directory', items: Array<{ name: string, type: 'directory'|'file' }> }>} data
+ * @param {Array<{ name: string, type: 'directory', items: Array<{ name: string, type: 'directory'|'file', lastModified?: string|null }> }>} data
  */
 export function setPresetsOverride(data) {
   presetsOverrideEntry = { data, fetchedAt: Date.now() };
