@@ -1,73 +1,85 @@
-# React + TypeScript + Vite
+# Genesis Logs – Frontend (web)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Interface web do **genesis-logs**: listagem e download de logs e visualização de Presets/Override (loot).
 
-Currently, two official plugins are available:
+## Stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Vite 7** + **React 19** + **TypeScript**
+- **Tailwind CSS v4** (`@tailwindcss/vite`)
+- **Lucide React** (ícones)
+- **class-variance-authority** + **clsx** + **tailwind-merge** (utilidades de classes)
 
-## React Compiler
+## Estrutura
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-]);
+```
+web/
+├── src/
+│   ├── api/           # Cliente da API
+│   │   ├── logs.ts    # Lista e download de logs (GET /logs/admin, GET /logs/admin/:filename)
+│   │   ├── loot.ts    # Presets/Override (GET /loot/presets/override)
+│   │   ├── cache.ts   # Cache em memória para requests
+│   │   └── errors.ts  # Tratamento de erros HTTP
+│   ├── components/
+│   │   ├── LogView.tsx   # Aba "Log": lista de ficheiros e download
+│   │   ├── LootView.tsx  # Aba "Loot": árvore Presets/Override
+│   │   └── ui/           # Componentes base (button, card, table, input)
+│   ├── lib/
+│   │   └── utils.ts   # cn() e helpers
+│   ├── App.tsx
+│   ├── main.tsx
+│   └── index.css
+├── public/
+│   └── genesis-logo.png
+├── vite.config.ts
+├── Dockerfile
+└── .env.example
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Scripts
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x';
-import reactDom from 'eslint-plugin-react-dom';
+| Comando     | Descrição                    |
+|------------|------------------------------|
+| `npm run dev`     | Servidor de desenvolvimento (porta 5173) |
+| `npm run build`   | Build de produção (`dist/`)  |
+| `npm run preview` | Pré-visualizar build         |
+| `npm run lint`    | ESLint                       |
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-]);
+## Variáveis de ambiente
+
+- **`VITE_API_URL`** (opcional): URL base da API. Em desenvolvimento, se não for definida, o front usa `/logs` e `/loot`, e o Vite faz proxy para o backend (ver `vite.config.ts`).
+- **`VITE_PROXY_TARGET`**: Alvo do proxy em dev (default: `http://localhost:3000`). Útil em Docker para apontar para o serviço da API.
+
+Ver `.env.example`.
+
+## API
+
+- **Logs**: base `VITE_API_URL ?? '/logs'`
+  - `GET .../admin` → lista de ficheiros (`LogFile[]`: `name`, `size`, `lastModified`, `lastAccess`)
+  - `GET .../admin/:filename` → download do ficheiro (blob)
+- **Loot**: base derivada de `VITE_API_URL` → `.../loot`
+  - `GET .../presets/override` → árvore de diretórios e ficheiros (`PresetsOverrideResponse`)
+
+Em dev, o proxy envia `/logs` e `/loot` para o backend; em produção, configurar `VITE_API_URL` no build para o domínio da API.
+
+## Tema e UI
+
+- Tema **Genesis**: classes `theme-genesis`, `genesis-accent`, `genesis-border`, `genesis-muted` em `index.css`.
+- Logo em `/genesis-logo.png`.
+- Abas: **Log** (lista e download) e **Loot** (Presets/Override).
+- Footer com link para o Discord.
+
+## Desenvolvimento com Docker
+
+O `Dockerfile` sobe o frontend em modo dev. Para o proxy acertar na API noutro container, defina no `docker run` ou no compose:
+
+```bash
+VITE_PROXY_TARGET=http://api:3000
 ```
+
+(Substituir `api` pelo nome do serviço da API no teu ambiente.)
+
+## Convenções
+
+- Usar `encodeURIComponent(filename)` em URLs de download.
+- Tratar 404 e outros erros com mensagens amigáveis (ver `api/errors.ts`).
+- Ao alterar a resposta do backend (campos ou formato), atualizar as interfaces em `api/logs.ts` / `api/loot.ts` e os componentes que as usam.
