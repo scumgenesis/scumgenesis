@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { FileText, Package } from 'lucide-react';
+import { FileText, Package, Github } from 'lucide-react';
 import { LogView } from '@/components/LogView';
 import { LootView } from '@/components/LootView';
 import { cn } from '@/lib/utils';
@@ -87,7 +87,7 @@ function App() {
           )}
         </main>
 
-        <footer className="flex justify-center pt-6">
+        <footer className="flex justify-center gap-6 pt-6">
           <a
             href="https://discord.gg/zfVGNWVY"
             target="_blank"
@@ -97,6 +97,16 @@ function App() {
           >
             <DiscordIcon className="size-6" />
             <span>Discord</span>
+          </a>
+          <a
+            href="https://github.com/scumgenesis/scumgenesis"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-2 rounded-lg text-muted-foreground transition-colors hover:text-genesis-accent"
+            title="Repositório no GitHub"
+          >
+            <Github className="size-6" />
+            <span>GitHub</span>
           </a>
         </footer>
       </div>
