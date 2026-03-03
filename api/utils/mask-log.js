@@ -21,6 +21,14 @@ function maskSteamIdsAndNames(text) {
   );
 }
 
+function maskStandaloneSteamIds(text) {
+  return text.replace(
+    /* eslint-disable-next-line security/detect-unsafe-regex */
+    /\b(\d{17})\b/g,
+    (_, steamId) => maskSteamId(steamId)
+  );
+}
+
 const COORD_VISIBLE_START = 3;
 const COORD_VISIBLE_END = 2;
 
@@ -45,7 +53,7 @@ function maskCoordinates(text) {
  */
 function maskLogLine(line) {
   if (typeof line !== 'string') return line;
-  return maskCoordinates(maskSteamIdsAndNames(line));
+  return maskCoordinates(maskStandaloneSteamIds(maskSteamIdsAndNames(line)));
 }
 
 /**
