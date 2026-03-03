@@ -1,15 +1,9 @@
-/**
- * Cache em memória para listagem Presets/Override (loot).
- * TTL: 1 hora.
- */
-
-const PRESETS_OVERRIDE_TTL_MS = 60 * 60 * 1000; // 1 hora
+const PRESETS_OVERRIDE_TTL_MS = 60 * 60 * 1000;
 
 /** @type {{ data: Array<{ name: string, type: 'directory', items: Array<{ name: string, type: 'directory'|'file', lastModified?: string|null }> }>, fetchedAt: number } | null} */
 let presetsOverrideEntry = null;
 
 /**
- * Retorna a listagem Presets/Override em cache se ainda válida (TTL 1h).
  * @returns {Array<{ name: string, type: 'directory', items: Array<{ name: string, type: 'directory'|'file', lastModified?: string|null }> }> | null}
  */
 export function getCachedPresetsOverride() {
@@ -23,7 +17,6 @@ export function getCachedPresetsOverride() {
 }
 
 /**
- * Armazena listagem Presets/Override no cache.
  * @param {Array<{ name: string, type: 'directory', items: Array<{ name: string, type: 'directory'|'file', lastModified?: string|null }> }>} data
  */
 export function setPresetsOverride(data) {

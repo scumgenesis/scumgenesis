@@ -1,13 +1,8 @@
-/**
- * Controller de logs - camada HTTP.
- * GET /logs/admin -> listagem
- * GET /logs/admin/:file -> download em stream
- */
-
 import * as logService from '../services/log.service.js';
 
 /**
- * Lista arquivos admin (últimos N dias).
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
  */
 export const listAdminLogs = async (req, res) => {
   const days = Math.min(Math.max(1, parseInt(req.query.days, 10) || 7), 365);
@@ -16,7 +11,8 @@ export const listAdminLogs = async (req, res) => {
 };
 
 /**
- * Download do arquivo em stream.
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
  */
 export const getAdminLogStream = async (req, res) => {
   const { file } = req.params;

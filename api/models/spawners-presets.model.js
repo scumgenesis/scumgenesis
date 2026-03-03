@@ -1,8 +1,3 @@
-/**
- * Camada de acesso a dados: listagem do diretório Presets/Override no SFTP.
- * Path: {IP}/Config/WindowsServer/Loot/Spawners/Presets/Override — lista diretórios e, dentro de cada um, os arquivos.
- */
-
 import pLimit from 'p-limit';
 import { createSftpClient, listDir } from '../clients/sftp-client.js';
 import config, { getSpawnersOverridePath } from '../config/config.js';
@@ -10,7 +5,6 @@ import config, { getSpawnersOverridePath } from '../config/config.js';
 const sftpLimit = pLimit(config.sftpConcurrency);
 
 /**
- * Converte timestamp do SFTP para ISO. Aceita segundos (até 1e12) ou milissegundos.
  * @param {number} time - segundos ou ms desde epoch
  * @returns {string|null} data em ISO ou null
  */
@@ -21,7 +15,6 @@ function toISO(time) {
 }
 
 /**
- * Lista diretórios e arquivos em Presets/Override (operação real no SFTP).
  * @returns {Promise<Array<{ name: string, type: 'directory', items: Array<{ name: string, type: 'directory'|'file', lastModified?: string|null }> }>>}
  */
 async function doFetchSpawnersPresetsOverride() {
@@ -80,7 +73,6 @@ async function doFetchSpawnersPresetsOverride() {
 }
 
 /**
- * Lista diretórios e arquivos em Presets/Override (respeitando limite de concorrência SFTP).
  * @returns {Promise<Array<{ name: string, type: 'directory', items: Array<{ name: string, type: 'directory'|'file', lastModified?: string|null }> }>>}
  */
 export async function fetchSpawnersPresetsOverride() {

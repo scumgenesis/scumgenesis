@@ -1,10 +1,3 @@
-/**
- * Camada de acesso a dados: listagem e download de logs admin no SFTP.
- * Sem cache - apenas I/O com o SFTP.
- * Usa limite de concorrência (SFTP_CONCURRENCY) e single-flight para evitar
- * múltiplas conexões para o mesmo recurso quando vários usuários pedem ao mesmo tempo.
- */
-
 import pLimit from 'p-limit';
 import { createSftpClient, listFiles, getFile } from '../clients/sftp-client.js';
 import { isValidAdminLogFilename } from '../utils/validation.js';
@@ -16,7 +9,6 @@ const inFlightListing = new Map();
 const inFlightFile = new Map();
 
 /**
- * Converte timestamp do SFTP para ISO. Aceita segundos (até 1e12) ou milissegundos.
  * @param {number} time - segundos ou ms desde epoch
  * @returns {string|null} data em ISO ou null
  */
@@ -27,7 +19,6 @@ function toISO(time) {
 }
 
 /**
- * Lista arquivos admin no SFTP (operação real, uma por vez dentro do limite).
  * @param {number} [days=7]
  */
 async function doFetchAdminLogListing(days = 7) {
@@ -58,8 +49,6 @@ async function doFetchAdminLogListing(days = 7) {
 }
 
 /**
- * Lista arquivos admin no SFTP.
- * Requisições concorrentes para o mesmo `days` compartilham uma única operação (single-flight).
  * @param {number} [days=7]
  * @returns {Promise<Array<{ name: string, size: number, lastModified: string|null, lastAccess: string|null }>>}
  */
@@ -75,7 +64,6 @@ export async function fetchAdminLogListing(days = 7) {
 }
 
 /**
- * Baixa o conteúdo do arquivo do SFTP para um buffer (operação real).
  * @param {string} filename - nome validado do arquivo
  */
 async function doFetchAdminLogFile(filename) {
@@ -127,8 +115,6 @@ async function doFetchAdminLogFile(filename) {
 }
 
 /**
- * Baixa o conteúdo do arquivo do SFTP para um buffer.
- * Requisições concorrentes para o mesmo arquivo compartilham uma única operação (single-flight).
  * @param {string} filename - nome validado do arquivo
  * @returns {Promise<{ buffer: Buffer, newestFilename: string|null }>}
  * @throws {Error} NOT_FOUND se o arquivo não existir

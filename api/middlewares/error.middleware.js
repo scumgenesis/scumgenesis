@@ -1,9 +1,3 @@
-/**
- * Tratamento de erros centralizado.
- * Respostas no formato { error, code }; em desenvolvimento o 500 pode incluir detail (sem stack).
- * Nunca expõe stack trace ao cliente.
- */
-
 import config from '../config/config.js';
 
 function sendError(res, status, message, code) {

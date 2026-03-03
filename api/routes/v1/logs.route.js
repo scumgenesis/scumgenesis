@@ -1,9 +1,3 @@
-/**
- * Rotas de logs - proxy admin.
- * GET /logs/admin -> lista arquivos
- * GET /logs/admin/:file -> download em stream (com rate limit)
- */
-
 import { Router } from 'express';
 import { catchAsync } from '../../utils/catch-async.js';
 import * as logController from '../../controllers/log.controller.js';

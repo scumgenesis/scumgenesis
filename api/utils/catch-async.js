@@ -1,6 +1,4 @@
 /**
- * Envolve controllers async para repassar erros ao middleware de erro.
- * Evita try/catch em toda rota.
  * @param {(...args: unknown[]) => Promise<unknown>} fn - controller async (req, res, next)
  * @returns {(req: import('express').Request, res: import('express').Response, next: import('express').NextFunction) => void}
  */

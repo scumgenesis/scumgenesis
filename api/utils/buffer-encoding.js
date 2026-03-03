@@ -1,9 +1,4 @@
 /**
- * Decodificação de buffers para string (UTF-8 / UTF-16).
- * Ficheiros de log do Windows são frequentemente UTF-16 LE (com ou sem BOM).
- * Sem BOM: tenta UTF-16 LE primeiro; se o resultado parecer texto de log válido, usa; senão tenta UTF-8.
- * Pode ser reutilizado por qualquer código que leia ficheiros de texto do FTP/SFTP.
- *
  * @param {Buffer} buffer - buffer bruto do ficheiro
  * @returns {string} conteúdo em string (UTF-8)
  */

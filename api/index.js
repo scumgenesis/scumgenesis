@@ -1,8 +1,3 @@
-/**
- * Entry point - carrega env da pasta api, inicia servidor.
- * Graceful shutdown em SIGTERM.
- */
-
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 import { config as loadEnv } from 'dotenv';

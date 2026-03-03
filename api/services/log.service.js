@@ -1,12 +1,3 @@
-/**
- * Serviço de logs - orquestra cache e fonte (SFTP).
- * Fluxo:
- * 1. Carregar o ficheiro na memória (baixado do FTP).
- * 2. Ler linha a linha e aplicar a máscara NA LINHA.
- * 3. Guardar todo o conteúdo pós-máscara na memória (cache).
- * 4. Devolver ao utilizador o conteúdo da memória (stream do buffer em cache).
- */
-
 import { Readable } from 'stream';
 import { isValidAdminLogFilename } from '../utils/validation.js';
 import { maskLogContent } from '../utils/mask-log.js';
@@ -22,7 +13,6 @@ import {
 import { fetchAdminLogListing, fetchAdminLogFile } from '../models/log-source.model.js';
 
 /**
- * Lista arquivos admin: retorna do cache se válido, senão busca no SFTP e armazena no cache.
  * @param {number} [days=7]
  * @returns {Promise<Array<{ name: string, size: number, lastModified: string|null, lastAccess: string|null }>>}
  */
@@ -37,8 +27,6 @@ export async function listAdminLogs(days = 7) {
 }
 
 /**
- * Retorna stream do arquivo. Nome deve ser validado antes.
- * Baixa o ficheiro do FTP, aplica máscara linha a linha e devolve o conteúdo.
  * @param {string} filename
  * @returns {Promise<{ stream: import('stream').Readable; client: null }>}
  */

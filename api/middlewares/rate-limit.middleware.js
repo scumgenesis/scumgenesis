@@ -1,9 +1,3 @@
-/**
- * Rate limiters para rotas da API.
- * downloadRateLimiter: download de log (ex.: GET /logs/admin/:file)
- * listRateLimiter: listagens (ex.: GET /logs/admin, GET /loot/presets/override)
- */
-
 import rateLimit from 'express-rate-limit';
 import config from '../config/config.js';
 
