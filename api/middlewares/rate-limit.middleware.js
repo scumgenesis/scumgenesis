@@ -7,7 +7,10 @@
 import rateLimit from 'express-rate-limit';
 import config from '../config/config.js';
 
-const message = { error: 'Muitas requisições. Tente novamente mais tarde.', code: 'TOO_MANY_REQUESTS' };
+const message = {
+  error: 'Muitas requisições. Tente novamente mais tarde.',
+  code: 'TOO_MANY_REQUESTS',
+};
 const handler = (req, res, next, options) => {
   res.status(429).json(options.message);
 };

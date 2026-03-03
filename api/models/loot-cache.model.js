@@ -13,7 +13,10 @@ let presetsOverrideEntry = null;
  * @returns {Array<{ name: string, type: 'directory', items: Array<{ name: string, type: 'directory'|'file', lastModified?: string|null }> }> | null}
  */
 export function getCachedPresetsOverride() {
-  if (!presetsOverrideEntry || Date.now() - presetsOverrideEntry.fetchedAt >= PRESETS_OVERRIDE_TTL_MS) {
+  if (
+    !presetsOverrideEntry ||
+    Date.now() - presetsOverrideEntry.fetchedAt >= PRESETS_OVERRIDE_TTL_MS
+  ) {
     return null;
   }
   return presetsOverrideEntry.data;

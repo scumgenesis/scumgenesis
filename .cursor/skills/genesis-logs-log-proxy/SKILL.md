@@ -13,7 +13,7 @@ description: Log proxy layer: cache TTL, SFTP/FTP clients, list and download flo
 | Serviço | services/log.service.js                | Orquestração: cache primeiro, depois fonte           |
 | Cache   | models/log-cache.model.js               | TTL em memória para listagem e buffers               |
 | Fonte   | models/log-source.model.js             | I/O SFTP: listagem e download (sem cache)            |
-| Cliente | clients/sftp-client.js                 | Conexão, list, read stream; credenciais do .env      |
+| Cliente | clients/sftp-client.js                 | Conexão, list, get (buffer); credenciais do .env      |
 
 Fluxo: rota → log.service → cache hit? retorna : log-source (SFTP) → preenche cache → retorna.
 
@@ -46,7 +46,7 @@ Regex em **utils/validation.js**: `^admin_.*\.log$`. Usar sempre `isValidAdminLo
 
 ## Clientes SFTP
 
-- **sftp-client.js**: `FTP_HOST` (ou `host:port`), `FTP_USER`, `FTP_PASSWORD`, `FTP_PORT` (se não em host), `FTP_TIMEOUT`; `createSftpClient()`, `listFiles(client)`, `createReadStream(client, filename)`.
+- **sftp-client.js**: `FTP_HOST` (ou `host:port`), `FTP_USER`, `FTP_PASSWORD`, `FTP_PORT` (se não em host), `FTP_TIMEOUT`; `createSftpClient()`, `listFiles(client)`, `listDir(client, path)`, `getFile(client, filename)`.
 - Conexão: criar por operação; fechar (`client.end()`) após uso, inclusive em erro.
 - Variáveis obrigatórias: FTP_HOST, FTP_USER, FTP_PASSWORD; opcionais: FTP_DIR, FTP_PORT, FTP_TIMEOUT.
 

@@ -57,7 +57,7 @@ async function doFetchSpawnersPresetsOverride() {
             type: e.type === 'd' ? 'directory' : 'file',
             lastModified: toISO(e.modifyTime),
           }));
-      } catch (listErr) {
+      } catch {
         items = [];
       }
 
@@ -71,7 +71,7 @@ async function doFetchSpawnersPresetsOverride() {
     return result;
   } finally {
     const noop = () => {};
-    
+
     client.on('error', noop);
     await client.end().catch(noop);
 

@@ -18,19 +18,19 @@ Copie o exemplo e ajuste:
 cp .env.example .env
 ```
 
-| Variável       | Obrigatório | Descrição                                    |
-| -------------- | ----------- | -------------------------------------------- |
-| `FTP_HOST`     | Sim         | Host do servidor FTP                         |
-| `FTP_USER`     | Sim         | Usuário FTP                                  |
-| `FTP_PASSWORD` | Sim         | Senha FTP                                    |
-| `FTP_DIR`      | Sim\*       | Pasta no FTP onde estão os logs              |
-| `PORT`         | Não         | Porta HTTP (padrão: 3000)                    |
-| `FTP_TIMEOUT`  | Não         | Timeout da conexão FTP em ms (padrão: 30000) |
-| `SFTP_CONCURRENCY` | Não     | Máx. operações SFTP simultâneas (padrão: 3)  |
-| `RATE_LIMIT_MAX_REQUESTS` | Não | Máx. requisições por IP em download de log (padrão: 2) |
-| `RATE_LIMIT_LIST_MAX_REQUESTS` | Não | Máx. requisições por IP em listagens por minuto (padrão: 30) |
-| `RATE_LIMIT_WINDOW_SECONDS` | Não | Janela do rate limit em segundos (padrão: 60) |
-| `LOG_MAX_FILE_SIZE_MB` | Não | Tamanho máximo de arquivo de log para download, em MB (padrão: 5). Acima disso responde 413. |
+| Variável                       | Obrigatório | Descrição                                                                                    |
+| ------------------------------ | ----------- | -------------------------------------------------------------------------------------------- |
+| `FTP_HOST`                     | Sim         | Host do servidor FTP                                                                         |
+| `FTP_USER`                     | Sim         | Usuário FTP                                                                                  |
+| `FTP_PASSWORD`                 | Sim         | Senha FTP                                                                                    |
+| `FTP_DIR`                      | Sim\*       | Pasta no FTP onde estão os logs                                                              |
+| `PORT`                         | Não         | Porta HTTP (padrão: 3000)                                                                    |
+| `FTP_TIMEOUT`                  | Não         | Timeout da conexão FTP em ms (padrão: 30000)                                                 |
+| `SFTP_CONCURRENCY`             | Não         | Máx. operações SFTP simultâneas (padrão: 3)                                                  |
+| `RATE_LIMIT_MAX_REQUESTS`      | Não         | Máx. requisições por IP em download de log (padrão: 2)                                       |
+| `RATE_LIMIT_LIST_MAX_REQUESTS` | Não         | Máx. requisições por IP em listagens por minuto (padrão: 30)                                 |
+| `RATE_LIMIT_WINDOW_SECONDS`    | Não         | Janela do rate limit em segundos (padrão: 60)                                                |
+| `LOG_MAX_FILE_SIZE_MB`         | Não         | Tamanho máximo de arquivo de log para download, em MB (padrão: 5). Acima disso responde 413. |
 
 \* Se não informado, usa `/`.
 

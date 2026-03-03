@@ -37,7 +37,6 @@ export async function createSftpClient() {
     username: user,
     password,
     readyTimeout: FTP_TIMEOUT_MS,
-    // Mantém a conexão viva durante leituras longas (evita "No response from server" por idle)
     keepaliveInterval: 15000,
   });
 
@@ -74,16 +73,4 @@ export function getFile(client, filename) {
   const dir = process.env.FTP_DIR || '/';
   const remotePath = dir.endsWith('/') ? `${dir}${filename}` : `${dir}/${filename}`;
   return client.get(remotePath);
-}
-
-/**
- * Retorna stream de leitura do arquivo remoto (streaming, sem carregar em memória).
- * @param {SftpClient} client - cliente já conectado
- * @param {string} filename - nome do arquivo (apenas nome, não path completo)
- * @returns {import('stream').Readable} stream legível
- */
-export function createReadStream(client, filename) {
-  const dir = process.env.FTP_DIR || '/';
-  const remotePath = dir.endsWith('/') ? `${dir}${filename}` : `${dir}/${filename}`;
-  return client.createReadStream(remotePath);
 }

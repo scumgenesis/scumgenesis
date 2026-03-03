@@ -1,10 +1,16 @@
 /**
  * Serviço de logs - orquestra cache e fonte (SFTP).
- * Listagem e download: primeiro tenta cache; em caso de miss, busca na fonte e preenche o cache.
+ * Fluxo:
+ * 1. Carregar o ficheiro na memória (baixado do FTP).
+ * 2. Ler linha a linha e aplicar a máscara NA LINHA.
+ * 3. Guardar todo o conteúdo pós-máscara na memória (cache).
+ * 4. Devolver ao utilizador o conteúdo da memória (stream do buffer em cache).
  */
 
 import { Readable } from 'stream';
 import { isValidAdminLogFilename } from '../utils/validation.js';
+import { maskLogContent } from '../utils/mask-log.js';
+import { bufferToUtf8String } from '../utils/buffer-encoding.js';
 import config from '../config/config.js';
 import {
   getCachedListing,
@@ -26,11 +32,13 @@ export async function listAdminLogs(days = 7) {
 
   const data = await fetchAdminLogListing(days);
   setListing(days, data);
+
   return data;
 }
 
 /**
  * Retorna stream do arquivo. Nome deve ser validado antes.
+ * Baixa o ficheiro do FTP, aplica máscara linha a linha e devolve o conteúdo.
  * @param {string} filename
  * @returns {Promise<{ stream: import('stream').Readable; client: null }>}
  */
@@ -43,11 +51,18 @@ export async function getAdminLogStream(filename) {
 
   const isNewest = getNewestFilenameFromListing(7) === filename;
   const cachedBuffer = getCachedFile(filename, isNewest);
+
   if (cachedBuffer && cachedBuffer.length <= config.maxLogFileSizeBytes) {
     return { stream: Readable.from(cachedBuffer), client: null };
   }
 
-  const { buffer, newestFilename } = await fetchAdminLogFile(filename);
-  setFile(filename, buffer, newestFilename === filename);
-  return { stream: Readable.from(buffer), client: null };
+  const { buffer: rawBuffer, newestFilename } = await fetchAdminLogFile(filename);
+
+  const contentInMemory = bufferToUtf8String(rawBuffer);
+  const maskedContent = maskLogContent(contentInMemory);
+  const maskedBuffer = Buffer.from(maskedContent, 'utf8');
+
+  setFile(filename, maskedBuffer, newestFilename === filename);
+
+  return { stream: Readable.from(maskedBuffer), client: null };
 }

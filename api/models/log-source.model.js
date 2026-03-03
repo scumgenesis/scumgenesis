@@ -97,7 +97,11 @@ async function doFetchAdminLogFile(filename) {
     const newestFilename = adminByModify[0]?.name ?? null;
 
     const fileEntry = files.find((f) => f.type === '-' && f.name === filename);
-    if (fileEntry != null && typeof fileEntry.size === 'number' && fileEntry.size > config.maxLogFileSizeBytes) {
+    if (
+      fileEntry != null &&
+      typeof fileEntry.size === 'number' &&
+      fileEntry.size > config.maxLogFileSizeBytes
+    ) {
       const err = new Error('Arquivo de log demasiado grande');
       err.code = 'FILE_TOO_LARGE';
       throw err;

@@ -26,7 +26,7 @@ export function isValidAdminLogFilename(filename) {
   try {
     const decoded = decodeURIComponent(filename);
     if (decoded !== filename && containsPathComponents(decoded)) return false;
-  } catch (_) {
+  } catch {
     return false;
   }
 

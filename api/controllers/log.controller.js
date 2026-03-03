@@ -30,7 +30,7 @@ export const getAdminLogStream = async (req, res) => {
     'Content-Disposition',
     `attachment; filename="${file}"; filename*=UTF-8''${encodeURIComponent(file)}`
   );
-  
+
   res.on('finish', closeClient);
   res.on('error', closeClient);
 
